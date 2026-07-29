@@ -71,7 +71,6 @@ name = "data_quality"
 version = "0.1.0"
 dependencies = [
  "libduckdb-sys",
- "once_cell",
  "quack-rs",
  "serde",
  "serde_json",
