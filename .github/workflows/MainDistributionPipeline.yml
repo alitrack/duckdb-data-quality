@@ -1,0 +1,24 @@
+name: Main Extension Distribution Pipeline
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: duckdb/extension-ci-tools/.github/workflows/_extension_distribution.yml@main
+    with:
+      duckdb_version: v1.5.5
+      extension_name: data_quality
+      description_file: extensions/data_quality/description.yml
+      exclude_archs: "linux_amd64_musl;wasm_mvp;wasm_eh;wasm_threads;windows_amd64_mingw;windows_amd64_rtools"
+      override_repository: alitrack/duckdb-data-quality
+      override_ref: refs/tags/v0.1.0
+      vcpkg_commit: 84bab45d415d22042bd0b9081aea57f362da3f35

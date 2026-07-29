@@ -1,0 +1,30 @@
+extension:
+  name: data_quality
+  description: "Data quality profiling and validation for DuckDB — null checks, uniqueness, ranges, table profiling, and Great Expectations-style rule validation"
+  version: 0.1.0
+  language: Rust
+  build: cargo
+  license: MIT
+  maintainers:
+    - alitrack
+  excluded_platforms: "linux_amd64_musl;wasm_eh;wasm_mvp;wasm_threads;windows_amd64_mingw;windows_amd64_rtools"
+
+repo:
+  github: alitrack/duckdb-data-quality
+  ref: refs/tags/v0.1.0
+
+docs:
+  hello_world: |
+    LOAD data_quality;
+
+    -- Check a column for NULLs
+    SELECT count(*) AS null_count FROM expect_not_null('users', 'email');
+
+    -- Full table profile
+    SELECT * FROM profile_table('orders');
+
+    -- Validate with JSON rules
+    SELECT * FROM validate_expectations('orders', '{
+      "expect_table_row_count_between": {"min": 100, "max": 100000},
+      "expect_column_values_not_null": {"column": "order_id"}
+    }');
